@@ -8,7 +8,7 @@ import time
 
 class Game:
     @staticmethod
-    def playGame(startingPosition, showMoves, delayBetweenEachMoveMS, win):
+    def playGame(startingPosition, showMoves, delayBetweenEachMoveMS, win, board):
         result = Result()
         pegs = {}
 
@@ -22,8 +22,6 @@ class Game:
         movesAvailable = True
 
         while (movesAvailable):
-            numPegsBefore = Board.countPegsLeft(pegs)
-
             theMove = mover.makeMove(pegs)
             if (len(theMove) == 0):  # No move found
                 movesAvailable = False               
@@ -37,7 +35,7 @@ class Game:
                 numPegsAfter = Board.countPegsLeft(pegs)
             
                 if (showMoves):
-                    Board.drawBoard(pegs, True, win, movedTo)
+                    board.drawBoard(pegs, win, movedTo)
                     time.sleep(delayBetweenEachMoveMS/1000)
 
         return result

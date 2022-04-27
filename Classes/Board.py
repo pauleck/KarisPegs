@@ -2,50 +2,7 @@ from array import *
 from graphics import *
 
 class Board:
-    @staticmethod
-    def drawBoard(pegs, useGraphics, win, pegMoved):
-        if (useGraphics == False):
-            Board.drawBoardText(pegs, win)
-        else:
-            Board.drawBoardGraphics(pegs, win, pegMoved)
-
-    @staticmethod
-    def countPegsLeft(pegs):
-        totalPegs = 0
-        for pegPosition in range(1,16):
-            if (pegs[pegPosition] == 1):
-                totalPegs = totalPegs + 1
-        
-        return totalPegs
-
-    @staticmethod
-    def drawBoardText(pegs):
-        # Figure out display positions
-        rowStartingValues = array('i', [0, 9, 7, 5, 3, 1])  # Ignore first element
-        spacesBetweenCols = 3
-
-        # Start at first peg
-        arrayPosition = 1
-        for row in range(1,6):
-            prtLine = ""
-
-            # Add spaces to get to the starting position of this row
-            for spaces in range(rowStartingValues[row]):
-                prtLine += " "
-
-            # Display all the pegs in this row
-            for cols in range(row):
-                prtLine += str(pegs[arrayPosition])
-                arrayPosition = arrayPosition + 1
-
-                # Add the spaces
-                for spaces in range(spacesBetweenCols):
-                    prtLine += " "
-
-            print (prtLine)
-
-    @staticmethod
-    def drawBoardGraphics(pegs, win, pegMoved):
+    def setupBoard(self, win):
         top  = Point(320, 10)
         bottomLeft = Point(60,360)
         bottomRight = Point(550,360)
@@ -77,10 +34,29 @@ class Board:
         
         radius = 25
         
-        pegCircles = []    
-        pegPosition  = 1
+        self.pegCircles = []    
+
         for p in pegPositions:
             c = Circle(p, radius)
+            c.setFill("white")
+            self.pegCircles.append(c)
+            c.draw(win)
+
+    def drawBoard(self, pegs, win, pegMoved):
+        Board.drawBoardGraphics(self, pegs, win, pegMoved)
+
+    def countPegsLeft(pegs):
+        totalPegs = 0
+        for pegPosition in range(1,16):
+            if (pegs[pegPosition] == 1):
+                totalPegs = totalPegs + 1
+        
+        return totalPegs
+
+    def drawBoardGraphics(self, pegs, win, pegMoved):
+        pegPosition = 1
+        
+        for c in self.pegCircles:
             if (pegMoved == pegPosition):
                 c.setFill("red")
             else:
@@ -89,6 +65,4 @@ class Board:
                 else:
                     c.setFill("green")
 
-            pegCircles.append(c)
-            c.draw(win)
             pegPosition = pegPosition + 1

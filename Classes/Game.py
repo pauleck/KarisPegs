@@ -1,12 +1,14 @@
+from ctypes import sizeof
 from Classes.Board import Board
 from Classes.Mover import Mover
 from Classes.Result import Result
 
 import random
+import time
 
 class Game:
     @staticmethod
-    def playGame(startingPosition):
+    def playGame(startingPosition, showMoves, delayBetweenEachMoveMS, win):
         result = Result()
         pegs = {}
 
@@ -17,19 +19,25 @@ class Game:
         result.startingPosition = startingPosition
 
         pegs[startingPosition] = 0
-        movesMade = []
-
         movesAvailable = True
+
         while (movesAvailable):
             numPegsBefore = Board.countPegsLeft(pegs)
 
-            result.moves = result.moves + mover.makeMove(pegs)
-            numPegsAfter = Board.countPegsLeft(pegs)
-            
-            if (numPegsBefore == numPegsAfter):
-                movesAvailable = False
+            theMove = mover.makeMove(pegs)
+            if (len(theMove) == 0):  # No move found
+                movesAvailable = False               
                 result.pegsLeft = numPegsAfter
                 if (numPegsAfter == 1) :
                     result.won = True
+            else:
+                movedTo = int(theMove.split("-")[1].replace(",", ""))
+
+                result.moves = result.moves + theMove
+                numPegsAfter = Board.countPegsLeft(pegs)
+            
+                if (showMoves):
+                    Board.drawBoard(pegs, True, win, movedTo)
+                    time.sleep(delayBetweenEachMoveMS/1000)
 
         return result

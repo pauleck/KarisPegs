@@ -31,7 +31,7 @@ class Statistics:
         maxWidth = 420
         maxPegsLeft = 8
         xWidthForeachPegLeft = maxWidth / maxPegsLeft
-        averagePosition = 420
+        averagePosition = 440
 
         statsWindow = GraphWin("Average Pegs Left Based on Starting Position", windowHeight, windowWidth)
         statsWindow.setBackground("gray")
@@ -64,7 +64,7 @@ class Statistics:
             r.setFill("yellow")
             chartLines.append(r)
 
-            tAvg = Text(Point(averagePosition, yPosition + textYPadding), str(round(averagePegs,0)))
+            tAvg = Text(Point(averagePosition, yPosition + textYPadding), str(round(averagePegs,2)))
             tAvg.setSize(10)
             tAvg.draw(statsWindow)
 

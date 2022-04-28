@@ -1,7 +1,11 @@
-from asyncio.windows_events import NULL
+# Pegs - Program to play the "Peg game" popular in the "Cracker Barrel" chain of resturants
+# Karis Eccleston - 3/15/2022
+
+# This is our main class that will play the Peg game over and over again and will pause when a game is won
+# We also keep statistics on how many pegs are left for each starting position so that a player will then no where the best starting position
+# should be to win the game
 import random
 from time import sleep
-from Classes.Board import Board
 from Classes.Game import Game
 from Classes.Results import Results
 from Classes.Statistics import Statistics
@@ -9,76 +13,38 @@ from graphics import *
 from Classes.Statistics import *
 from Classes.Ui import *
 
+# Thie is where we start all the results so that we can show a statistics window
 results = Results()
-
-attemptsPerStartingPosition = 1
 statistics = Statistics()
 
-# win = GraphWin("Peg", 640, 520)
-# win.setBackground("white")
-
-# board = Board()
-# board.setupBoard(win)
-
+# This class controls all the UI on the screen
 Ui = Ui()
 
+# How many games we have played
 numGames = 0
+
+# Delay between each move of the game so that you can see each move being made, buttons on on the screen can be used to speed up or slow down the game
 delayTimeMS = 100
 
-# textWinLose = Text(Point(310,380),"")
-# textWinLose.setSize(30)
-# textWinLose.draw(win)
-# textGamesPlayed = Text(Point(305,425), "")
-# textGamesPlayed.setSize(18)
-# textGamesPlayed.draw(win)
-
-# speedUp = Rectangle(Point(50,410), Point(160,440))
-# speedUp.setFill("GRAY")
-# speedUp.draw(win)
-
-# textSpeedUp = Text(Point(104,425), "SPEED UP")
-# textSpeedUp.setSize(15)
-# textSpeedUp.setTextColor("WHITE")
-# textSpeedUp.draw(win)
-
-# slowDown = Rectangle(Point(450,410), Point(592,440))
-# slowDown.setFill("GRAY")
-# slowDown.draw(win)
-
-# textSlowDown = Text(Point(520,425), "SLOW DOWN")
-# textSlowDown.setSize(15)
-# textSlowDown.setTextColor("WHITE")
-# textSlowDown.draw(win)
-
-# showStats = Rectangle(Point(180,470), Point(440,510))
-# showStats.setFill("CYAN")
-# showStats.draw(win)
-
-# showStatsText = Text(Point(310,490), "SHOW STATISTICS")
-# showStatsText.setSize(19)
-# showStatsText.setTextColor("BLACK")
-# showStatsText.draw(win)
-
+# Keep going forever and ever and ever until the user closes the window
 while True:
+    # Pick a random position to remove a peg (the "starting position")
     startingPosition = random.randint(1,16)
 
-    result = Game.playGame(startingPosition, True, Ui.win, Ui.board)
+    # Go play a game!
+    result = Game.playGame(startingPosition, True, Ui.win, Ui.board, delayTimeMS)
+
+    # Display whether this game won or lost
     Ui.SetWinLoseText(result.won)
-    # if (result.won):
-    #     textWinLose.setText(" WIN - CLICK TO CONTINUE ")
-    #     textWinLose.setTextColor("green")
-    #     win.getMouse() # Pause to view result
 
-    # else:
-    #     textWinLose.setText(" LOSE ")
-    #     textWinLose.setTextColor("RED")
-
+    # Add 1 to the number of games and send that back to our UI class to display on the screen
     numGames = numGames + 1
     Ui.AddGame(numGames)
 
-    # textGamesPlayed.setText (str(numGames) + " GAMES PLAYED")
+    # Take a break!
     sleep(delayTimeMS/1000)
 
+    # Check to see if any of our buttons have been clicked
     clicked = Ui.checkMouseInputs()
     if (clicked == "SPEEDUP"):
         delayTimeMS = delayTimeMS / 2
@@ -88,8 +54,7 @@ while True:
 
     if (clicked == "STATS"):
         statistics.drawChart()
-    
+
+    # Add this game to our statistics to show later    
     statistics.addResult(startingPosition, result.pegsLeft, False)
     results.addResult(result)
-
-#results.printResults()

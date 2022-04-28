@@ -1,12 +1,11 @@
-# Pegs - Program to play the game game popular in the "Cracker Barrel" chain of resturants
+# Pegs - Program to play the "Peg game" popular in the "Cracker Barrel" chain of resturants
 # Karis Eccleston - 3/15/2022
 
 # This class is used to actually play the game, using random moves until no more moves are left
 
-from ctypes import sizeof
-from Classes.Board import Board
 from Classes.Mover import Mover
 from Classes.Result import Result
+from time import sleep
 
 class Game:
     @staticmethod
@@ -15,7 +14,7 @@ class Game:
     #   showMoves         - Show each game being played on a graphical board
     #   win               - The graphical window used to show the graphical board
     #   board             - Instance of the board class which is used to show the graphical board
-    def playGame(startingPosition, showMoves, win, board):
+    def playGame(startingPosition, showMoves, win, board, delayBetweenEachMove):
         result = Result()
 
         # Setup a dictionary with all the pegs and start by putting a peg in each one
@@ -42,7 +41,6 @@ class Game:
                 result.pegsLeft = Game.countPegsLeft(pegs)
                 if (result.pegsLeft == 1):
                     result.won = True
-                    print ("WON")
 
             else:
                 # The mover.makeMove returns the peg came from and peg it went to for example 2-5
@@ -53,7 +51,9 @@ class Game:
 
                 # If requested draw a pretty board            
                 if (showMoves):
-                    board.drawBoard(pegs, win, movedTo)
+                    board.drawBoard(pegs, movedTo)
+
+                sleep(delayBetweenEachMove/1000)
 
         return result
 

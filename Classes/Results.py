@@ -1,7 +1,11 @@
-from Classes.Result import Result
+# Pegs - Program to play the "Peg game" popular in the "Cracker Barrel" chain of resturants
+# Karis Eccleston - 3/15/2022
+
+# This class is used to store results of each game so we can display statistics later
 
 class Results:
-     def __init__(self):
+    # Setup all the arrays and dictionaries we will use to store statistics
+    def __init__(self):
         self.results = []
         self.attempts = {}
         self.won = {}
@@ -15,7 +19,8 @@ class Results:
             self.totalPegsLeft[r] = 0
             self.winningCombinations[r] = []
 
-     def addResult(self, result):
+    # Add a result to the arrays and dictionaries
+    def addResult(self, result):
          self.results.append(result)
 
          self.attempts[result.startingPosition] = self.attempts[result.startingPosition] + 1
@@ -32,11 +37,3 @@ class Results:
                 self.winningCombinations[result.startingPosition].append(result.moves)
 
          self.totalPegsLeft[result.startingPosition] = self.totalPegsLeft[result.startingPosition] + result.pegsLeft
-
-     def printResults(self):
-        for r in range(1,16):
-            percentWon = round(self.won[r] / self.attempts[r] * 100,2)
-            averagePegsLeft = round(self.totalPegsLeft[r] / self.attempts[r],0)
-
-            print ("{:<2} {:<4} {:<4} {:<4}".format(r, percentWon, self.won[r], len(self.winningCombinations[r])))
-         

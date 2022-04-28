@@ -160,6 +160,7 @@ __version__ = "5.0"
 #     Added ability to set text atttributes.
 #     Added Entry boxes.
 
+from operator import delitem
 import time, os, sys
 
 try:  # import as appropriate for 2.x vs. 3.x

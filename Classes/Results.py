@@ -9,7 +9,7 @@ class Results:
         self.winningCombinations = {}
 
         # Calculate stats for each starting position
-        for r in range(1,16):
+        for r in range(1,17):
             self.attempts[r] = 0
             self.won[r] = 0
             self.totalPegsLeft[r] = 0

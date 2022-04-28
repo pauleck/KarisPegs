@@ -1,41 +1,68 @@
+# Pegs - Program to play the game game popular in the "Cracker Barrel" chain of resturants
+# Karis Eccleston - 3/15/2022
+
+# This class is used to actually play the game, using random moves until no more moves are left
+
 from ctypes import sizeof
 from Classes.Board import Board
 from Classes.Mover import Mover
 from Classes.Result import Result
 
-import random
-import time
-
 class Game:
     @staticmethod
-    def playGame(startingPosition, showMoves, delayBetweenEachMoveMS, win, board):
+    # This function is used to start the game
+    #   startingPosition  - Which of the 15 available pegs are empty
+    #   showMoves         - Show each game being played on a graphical board
+    #   win               - The graphical window used to show the graphical board
+    #   board             - Instance of the board class which is used to show the graphical board
+    def playGame(startingPosition, showMoves, win, board):
         result = Result()
-        pegs = {}
 
+        # Setup a dictionary with all the pegs and start by putting a peg in each one
+        pegs = {}
         for loop in range(1,16):
             pegs[loop] = 1
 
-        mover = Mover()
+        # Remove a peg in the starting position
         result.startingPosition = startingPosition
-
         pegs[startingPosition] = 0
-        movesAvailable = True
 
+        # Class which is used to calculate next available moves
+        mover = Mover()
+
+        # Loop thru until we either WIN (yeah!) or run of moves (boo!)
+        movesAvailable = True
         while (movesAvailable):
+            # Make a move
             theMove = mover.makeMove(pegs)
+
+            # No move found
             if (len(theMove) == 0):  # No move found
                 movesAvailable = False               
-                result.pegsLeft = numPegsAfter
-                if (numPegsAfter == 1) :
+                result.pegsLeft = Game.countPegsLeft(pegs)
+                if (result.pegsLeft == 1):
                     result.won = True
+                    print ("WON")
+
             else:
+                # The mover.makeMove returns the peg came from and peg it went to for example 2-5
                 movedTo = int(theMove.split("-")[1].replace(",", ""))
 
+                # Keep track of all the moves made here
                 result.moves = result.moves + theMove
-                numPegsAfter = Board.countPegsLeft(pegs)
-            
+
+                # If requested draw a pretty board            
                 if (showMoves):
                     board.drawBoard(pegs, win, movedTo)
-                    time.sleep(delayBetweenEachMoveMS/1000)
 
         return result
+
+    @staticmethod
+    # Count number of pegs left
+    def countPegsLeft(pegs):
+        totalPegs = 0
+        for pegPosition in range(1,16):
+            if (pegs[pegPosition] == 1):
+                totalPegs = totalPegs + 1
+        
+        return totalPegs

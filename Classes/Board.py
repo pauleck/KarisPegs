@@ -43,17 +43,6 @@ class Board:
             c.draw(win)
 
     def drawBoard(self, pegs, win, pegMoved):
-        Board.drawBoardGraphics(self, pegs, win, pegMoved)
-
-    def countPegsLeft(pegs):
-        totalPegs = 0
-        for pegPosition in range(1,16):
-            if (pegs[pegPosition] == 1):
-                totalPegs = totalPegs + 1
-        
-        return totalPegs
-
-    def drawBoardGraphics(self, pegs, win, pegMoved):
         pegPosition = 1
         
         for c in self.pegCircles:
